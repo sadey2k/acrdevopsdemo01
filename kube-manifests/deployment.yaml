@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  acrdevopsdemo01-name
+  labels:
+    app:  acrdevopsdemo01-app-label
+spec:
+  replicas: 1
+  selector:
+      matchLabels:
+        app: acrdevopsdemo01-app-label
+  template:
+    metadata:
+      labels:
+        app:  acrdevopsdemo01-app-label
+    spec:
+      containers:
+      - name:  acrdevopsdemo01-container-name
+        image:  acrdevopsdemo01.azurecr.io/devops01/acrdevopsdemo01-app01:v1
+        ports:
+          - containerPort:  80
+        imagePullPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: acrdevopsdemo01-loadbalancer-service-name
+  namespace: default
+  labels:
+    app: acrdevopsdemo01-app-label
+spec:
+  selector:
+    app: acrdevopsdemo01-app-label
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
