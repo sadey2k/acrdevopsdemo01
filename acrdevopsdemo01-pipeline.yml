@@ -12,7 +12,7 @@ pool:
   vmImage: 'TestAgentPool'
 
 variables:
-   tag: $(Build.SourceVersion)
+   tag: $(Build.BuildId)
 
 stages:
   - stage: Build
@@ -28,7 +28,18 @@ stages:
           repository: 'devops01/acrdevopsdemo01-app01'
           command: 'buildAndPush'
           Dockerfile: '**/Dockerfile'
-          tags: '$(Build.SourceVersion)'
-      
+          tags: '$(Build.BuildId)'
+  
 
+      - task: CopyFiles@2
+        inputs:
+          SourceFolder: '$(System.DefaultWorkingDirectory)/kube-manifests'
+          Contents: '**'
+          TargetFolder: '$(Build.ArtifactsDirectory)'
+          OverWrite: true
 
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'kube-manifests'
+          publishLocation: 'Container'
