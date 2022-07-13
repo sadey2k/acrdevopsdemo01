@@ -15,12 +15,12 @@ variables:
    tag: $(Build.SourceVersion)
 
 stages:
-  - stage: Build and Deploy
+  - stage: Build
     displayName: Build Stage
     jobs: 
     - job: Build
       displayName: Build Job
-      pool: 'TestPoolAgent'
+      pool: 'TestAgentPool'
       steps:
       - task: Docker@2
         inputs:
@@ -28,6 +28,7 @@ stages:
           repository: 'devops01/acrdevopsdemo01-app01'
           command: 'buildAndPush'
           Dockerfile: '**/Dockerfile'
+          tags: '$(Build.SourceVersion)'
       
 
 
