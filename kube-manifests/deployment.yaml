@@ -27,7 +27,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: acrdevopsdemo01-loadbalancer-service-name
-  namespace: default
   labels:
     app: acrdevopsdemo01-app-label
 spec:
